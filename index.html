@@ -21,6 +21,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
         
         .container {
@@ -63,6 +64,13 @@
         .logo i {
             font-size: 2.5rem;
             color: #fdbb2d;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         
         .subtitle {
@@ -71,59 +79,6 @@
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.6;
-        }
-        
-        .workflow {
-            display: flex;
-            justify-content: space-between;
-            margin: 30px 0;
-            position: relative;
-        }
-        
-        .workflow::before {
-            content: "";
-            position: absolute;
-            top: 30px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(to right, #1a2a6c, #b21f1f, #fdbb2d);
-            z-index: 1;
-        }
-        
-        .step {
-            text-align: center;
-            z-index: 2;
-            position: relative;
-            flex: 1;
-        }
-        
-        .step-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 1.5rem;
-            color: #fdbb2d;
-            border: 3px solid #fdbb2d;
-        }
-        
-        .step-title {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            color: #fdbb2d;
-        }
-        
-        .step-desc {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            max-width: 200px;
-            margin: 0 auto;
         }
         
         .content {
@@ -161,6 +116,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             background: rgba(0, 0, 0, 0.2);
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         
         .upload-area:hover {
@@ -228,18 +189,22 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
         
         #image-preview, #video-preview {
             max-width: 100%;
             max-height: 100%;
-            display: none;
             border-radius: 8px;
         }
         
         .preview-placeholder {
             text-align: center;
             color: rgba(255, 255, 255, 0.5);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         
         .preview-placeholder i {
@@ -269,6 +234,7 @@
             font-size: 1rem;
             margin-bottom: 20px;
             transition: border-color 0.3s;
+            resize: vertical;
         }
         
         .prompt-input:focus {
@@ -322,6 +288,16 @@
             border-radius: 12px;
         }
         
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+        
         .features {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -367,14 +343,27 @@
             font-size: 0.9rem;
         }
         
-        .error-message {
-            color: #ff6b6b;
-            text-align: center;
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(255, 0, 0, 0.1);
-            border-radius: 8px;
+        .file-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
             display: none;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #1a2a6c, #fdbb2d);
+            width: 0%;
+            transition: width 0.4s ease;
         }
         
         @media (max-width: 768px) {
@@ -382,17 +371,12 @@
                 grid-template-columns: 1fr;
             }
             
-            .workflow {
-                flex-direction: column;
-                gap: 40px;
-            }
-            
-            .workflow::before {
-                display: none;
-            }
-            
             .features {
                 grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
             }
         }
     </style>
@@ -406,32 +390,6 @@
             </div>
             <p class="subtitle">Transforme suas imagens estáticas em vídeos impressionantes com o poder da Inteligência Artificial. Simples, rápido e sem marcas d'água.</p>
         </header>
-        
-        <div class="workflow">
-            <div class="step">
-                <div class="step-icon">
-                    <i class="fas fa-upload"></i>
-                </div>
-                <div class="step-title">Upload da Imagem</div>
-                <div class="step-desc">Envie sua imagem JPG, PNG ou WebP</div>
-            </div>
-            
-            <div class="step">
-                <div class="step-icon">
-                    <i class="fas fa-cogs"></i>
-                </div>
-                <div class="step-title">Processamento IA</div>
-                <div class="step-desc">Nossa IA transforma a imagem em vídeo</div>
-            </div>
-            
-            <div class="step">
-                <div class="step-icon">
-                    <i class="fas fa-download"></i>
-                </div>
-                <div class="step-title">Download do Vídeo</div>
-                <div class="step-desc">Baixe seu vídeo em 1080p sem marca d'água</div>
-            </div>
-        </div>
         
         <div class="features">
             <div class="feature-card">
@@ -463,7 +421,7 @@
             <div class="panel">
                 <div class="panel-title">
                     <i class="fas fa-image"></i>
-                    <span>Upload da Imagem</span>
+                    <span>Sua Imagem</span>
                 </div>
                 
                 <div class="upload-area" id="upload-area">
@@ -475,6 +433,10 @@
                         <i class="fas fa-folder-open"></i> Selecionar Imagem
                     </button>
                     <input type="file" id="image-input" class="file-input" accept="image/jpeg, image/png, image/webp">
+                    <div class="file-info" id="file-info"></div>
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
                 </div>
                 
                 <div class="prompt-section">
@@ -482,6 +444,12 @@
                         <i class="fas fa-comment-alt"></i> Descrição do Vídeo (opcional)
                     </label>
                     <textarea id="prompt-input" class="prompt-input" placeholder="Descreva o que você quer no vídeo (ex: 'Paisagem com movimento de nuvens e pássaros voando')"></textarea>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn" id="generate-btn" disabled>
+                        <i class="fas fa-magic"></i> Gerar Vídeo
+                    </button>
                 </div>
             </div>
             
@@ -493,14 +461,14 @@
                 
                 <div class="preview-container">
                     <div class="preview-box">
-                        <img id="image-preview" alt="Pré-visualização da imagem">
-                        <video id="video-preview" controls></video>
+                        <img id="image-preview" alt="Pré-visualização da imagem" style="display: none;">
+                        <video id="video-preview" controls style="display: none;"></video>
                         <div class="preview-placeholder" id="image-placeholder">
                             <i class="fas fa-image"></i>
                             <p>Nenhuma imagem selecionada</p>
                         </div>
                         <div class="preview-placeholder" id="video-placeholder" style="display: none;">
-                            <i class="fas fa-sync-alt"></i>
+                            <i class="fas fa-sync-alt fa-spin"></i>
                             <p>Processando vídeo...</p>
                         </div>
                     </div>
@@ -518,18 +486,12 @@
                         <button class="btn" id="download-btn">
                             <i class="fas fa-download"></i> Baixar Vídeo (1080p)
                         </button>
+                        <button class="btn" id="reset-btn" style="margin-top: 10px; background: #555;">
+                            <i class="fas fa-redo"></i> Nova Conversão
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="controls">
-            <button class="btn" id="generate-btn" disabled>
-                <i class="fas fa-magic"></i> Gerar Vídeo
-            </button>
-            <button class="btn" id="reset-btn">
-                <i class="fas fa-redo"></i> Reiniciar
-            </button>
         </div>
     </div>
     
@@ -554,6 +516,9 @@
         const errorMessage = document.getElementById('error-message');
         const imagePlaceholder = document.getElementById('image-placeholder');
         const videoPlaceholder = document.getElementById('video-placeholder');
+        const fileInfo = document.getElementById('file-info');
+        const progressBar = document.getElementById('progress-bar');
+        const progress = document.getElementById('progress');
         
         // Variáveis globais
         let selectedImage = null;
@@ -601,10 +566,37 @@
                 return;
             }
             
+            // Limitar tamanho do arquivo (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                showError('O arquivo é muito grande. Por favor, selecione uma imagem menor que 10MB.');
+                return;
+            }
+            
             selectedImage = file;
             const reader = new FileReader();
             
+            // Mostrar informações do arquivo
+            fileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+            fileInfo.style.display = 'block';
+            
+            // Simular progresso de upload
+            progressBar.style.display = 'block';
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                } else {
+                    width += 5;
+                    progress.style.width = `${width}%`;
+                }
+            }, 50);
+            
             reader.onload = (e) => {
+                // Esconder progresso
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                }, 500);
+                
                 imagePreview.src = e.target.result;
                 imagePreview.style.display = 'block';
                 imagePlaceholder.style.display = 'none';
@@ -616,6 +608,14 @@
             };
             
             reader.readAsDataURL(file);
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
         
         async function generateVideo() {
@@ -630,54 +630,35 @@
             resultSection.style.display = 'none';
             
             try {
-                // Simulação da chamada à API do Vheer
-                await new Promise(resolve => setTimeout(resolve, 3000));
-                
-                // Em um ambiente real, você usaria:
-                /*
-                const formData = new FormData();
-                formData.append('image', selectedImage);
-                formData.append('prompt', promptInput.value);
-                formData.append('duration', '5');
-                formData.append('aspect_ratio', '16:9');
-                formData.append('resolution', '1080p');
-                formData.append('style', 'cinematic');
-                
-                const response = await fetch('https://api.vheer.ai/v1/image-to-video', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer SUA_API_KEY_AQUI'
-                    },
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (data.status === "success") {
-                    generatedVideoUrl = data.video_url;
-                    videoPreview.src = generatedVideoUrl;
-                    videoPreview.style.display = 'block';
-                    videoPlaceholder.style.display = 'none';
-                    resultSection.style.display = 'block';
-                } else {
-                    throw new Error(data.message || 'Erro ao gerar o vídeo');
-                }
-                */
-                
-                // Simulação de resposta bem-sucedida
-                generatedVideoUrl = 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-                videoPreview.src = generatedVideoUrl;
-                videoPreview.style.display = 'block';
-                videoPlaceholder.style.display = 'none';
-                resultSection.style.display = 'block';
+                // Simular tempo de processamento
+                let progressValue = 0;
+                const progressInterval = setInterval(() => {
+                    progressValue += 5;
+                    if (progressValue > 100) {
+                        clearInterval(progressInterval);
+                        // Simular conclusão
+                        setTimeout(() => {
+                            loading.style.display = 'none';
+                            showResult();
+                        }, 500);
+                    }
+                }, 200);
                 
             } catch (error) {
                 console.error('Erro:', error);
                 showError('Erro ao conectar com o serviço. Verifique sua conexão ou tente novamente mais tarde.');
-            } finally {
                 loading.style.display = 'none';
                 generateBtn.disabled = false;
             }
+        }
+        
+        function showResult() {
+            // Usar um vídeo de demonstração
+            generatedVideoUrl = 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+            videoPreview.src = generatedVideoUrl;
+            videoPreview.style.display = 'block';
+            videoPlaceholder.style.display = 'none';
+            resultSection.style.display = 'block';
         }
         
         function downloadVideo() {
@@ -697,17 +678,24 @@
             imageInput.value = '';
             imagePreview.style.display = 'none';
             videoPreview.style.display = 'none';
+            videoPreview.src = '';
             promptInput.value = '';
             generateBtn.disabled = true;
             resultSection.style.display = 'none';
             imagePlaceholder.style.display = 'flex';
             videoPlaceholder.style.display = 'none';
             hideError();
+            fileInfo.style.display = 'none';
+            progressBar.style.display = 'none';
+            progress.style.width = '0%';
         }
         
         function showError(message) {
             errorMessage.textContent = message;
             errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
         }
         
         function hideError() {
